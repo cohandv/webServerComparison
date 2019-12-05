@@ -1,0 +1,15 @@
+version: '2.1'
+services:
+  app:
+    build:
+      context: ./app
+    ports:
+      - 3600:3600
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - 81:81
+    links:
+      - app
