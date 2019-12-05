@@ -10,7 +10,7 @@ services:
       - /dev/disk/:/dev/disk:ro
     ports:
       - 8080:8080
-  app:
+  appnginx:
     build:
       context: ./app
     ports:
@@ -27,7 +27,30 @@ services:
     ports:
       - 81:81
     links:
-      - app
+      - appnginx
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 50M
+  appapache:
+    build:
+      context: ./app
+    ports:
+      - 3601:3600
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 50M
+  apache:
+    image: httpd
+    volumes:
+      - ./apache/conf/httpd.conf:/usr/local/apache2/conf/httpd.conf
+    ports:
+      - 80:80
+    links:
+      - appnginx
     deploy:
       resources:
         limits:
